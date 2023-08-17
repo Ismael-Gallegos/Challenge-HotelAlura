@@ -11,10 +11,16 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
+
+import Modelo.Reservaciones;
+import controller.ReservacionesController;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.text.Format;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -37,6 +43,8 @@ public class ReservasView extends JFrame {
 	int xMouse, yMouse;
 	private JLabel labelExit;
 	private JLabel labelAtras;
+	
+	private ReservacionesController reservacionesController;
 
 	/**
 	 * Launch the application.
@@ -59,6 +67,8 @@ public class ReservasView extends JFrame {
 	 */
 	public ReservasView() {
 		super("Reserva");
+		// Crear una instancia de ReservacionesController
+		this.reservacionesController = new ReservacionesController();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ReservasView.class.getResource("/imagenes/aH-40px.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 560);
@@ -309,10 +319,41 @@ public class ReservasView extends JFrame {
 		btnsiguiente.setBounds(238, 493, 122, 35);
 		panel.add(btnsiguiente);
 		btnsiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-
-	}
 		
+		
+		//PARTE QUE NO ESTABA EN EL CODIGO CHECAR*****
+		JLabel lblSiguiente1 = new JLabel("SIGUIENTE");
+		lblSiguiente1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSiguiente1.setForeground(Color.WHITE);
+		lblSiguiente1.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblSiguiente1.setBounds(0, 0, 122, 35);
+		btnsiguiente.add(lblSiguiente1);
+		}
+		
+	// Método para guardar reservaciones
+	private void guardarReservaciones() {
+		if (txtFechaEntrada.getDate() != null && 
+		    txtFechaSalida.getDate() != null && 
+		    !txtValor.getText().isEmpty() && 
+		    !txtFormaPago.getSelectedItem().toString().isEmpty()) {
+		    
+		    // Obtener las fechas y crear una instancia de Reservaciones
+		    LocalDate fechaE = txtFechaEntrada.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		    LocalDate fechas = txtFechaSalida.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		    Reservaciones reservaciones = new Reservaciones(fechaE, fechas, txtValor.getText(), txtFormaPago.getSelectedItem().toString());
+		    
+		    // Llamar al método guardar del controlador
+		    reservacionesController.guardar(reservaciones);
+		    
+		    // Abrir la siguiente ventana
+		    RegistroHuesped registro = new RegistroHuesped();
+		    registro.setVisible(true);
+		    dispose();
+		}
+	}
+	
+	
+	
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
 	        xMouse = evt.getX();
