@@ -1,7 +1,10 @@
 package controller;
 
+import java.sql.Connection;
+
 import DAO.ReservacionesDao;
 import Modelo.Reservaciones;
+import factory.ConnectionFactory;
 
 public class ReservacionesController {
 	
@@ -14,8 +17,8 @@ public class ReservacionesController {
 	
 	// Constructor adicional sin parámetros
 	public ReservacionesController() {
-		super();
-		this.reservacionDao = reservacionDao;
+		Connection con = new ConnectionFactory().conectaFactory();
+		this.reservacionDao = new ReservacionesDao(con);
 	}
 
 	// Método para guardar una reserva utilizando el DAO

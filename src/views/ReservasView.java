@@ -275,7 +275,7 @@ public class ReservasView extends JFrame {
 		txtFechaSalida.setFont(new Font("Roboto", Font.PLAIN, 18));
 		txtFechaSalida.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
-				//Activa el evento, después del usuario seleccionar las fechas se debe calcular el valor de la reserva
+				calcularValor(txtFechaEntrada, txtFechaSalida);
 			}
 		});
 		txtFechaSalida.setDateFormatString("yyyy-MM-dd");
@@ -287,7 +287,7 @@ public class ReservasView extends JFrame {
 		txtValor.setBackground(SystemColor.text);
 		txtValor.setHorizontalAlignment(SwingConstants.CENTER);
 		txtValor.setForeground(Color.BLACK);
-		txtValor.setBounds(78, 328, 43, 33);
+		txtValor.setBounds(78, 328, 150, 33);
 		txtValor.setEditable(false);
 		txtValor.setFont(new Font("Roboto Black", Font.BOLD, 17));
 		txtValor.setBorder(javax.swing.BorderFactory.createEmptyBorder());
@@ -308,8 +308,7 @@ public class ReservasView extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (ReservasView.txtFechaEntrada.getDate() != null && ReservasView.txtFechaSalida.getDate() != null) {		
-					RegistroHuesped registro = new RegistroHuesped();
-					registro.setVisible(true);
+					guardarReservaciones();
 				} else {
 					JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
 				}
@@ -322,7 +321,6 @@ public class ReservasView extends JFrame {
 		btnsiguiente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		
 		
-		//PARTE QUE NO ESTABA EN EL CODIGO CHECAR*****
 		JLabel lblSiguiente1 = new JLabel("SIGUIENTE");
 		lblSiguiente1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSiguiente1.setForeground(Color.WHITE);
@@ -350,34 +348,43 @@ public class ReservasView extends JFrame {
 		    RegistroHuesped registro = new RegistroHuesped();
 		    registro.setVisible(true);
 		    dispose();
+		}else {
+			JOptionPane.showMessageDialog(this, "Debes llenar todos los campos requeridos");
 		}
 	}
 	
 	public void calcularValor(JDateChooser fechaE, JDateChooser fechaS) {
 	    // Verifica si las fechas de entrada y salida no son nulas
 	    if (fechaE.getDate()!= null && fechaS.getDate()!= null) {
+	        if (fechaE.getDate().after(fechaS.getDate())) {
+	            JOptionPane.showMessageDialog(null, "La fecha de entrada no puede ser posterior a la fecha de salida",
+	                    "Error en las fechas", JOptionPane.ERROR_MESSAGE);
+	            return;
+	        }
+
 	        // Crea objetos Calendar a partir de las fechas de entrada y salida
 	        Calendar inicio = fechaE.getCalendar();
-	        Calendar fin = fechaE.getCalendar();
-	        
+	        Calendar fin = fechaS.getCalendar();
+
 	        // Inicializa 'dias' en -1, para contar desde el día siguiente
 	        int dias = -1; 
 	        // Establece el costo por noche
-	        int noche = 80; // Costo por noche
-	        
+	        int noche = 250; // Costo por noche
+	        int valor;
+
 	        // Bucle que cuenta el número de noches entre las fechas de entrada y salida
 	        while(inicio.before(fin) || inicio.equals(fin)) {
 	            dias++;
 	            inicio.add(Calendar.DATE, 1); // Avanza al siguiente día
 	        }
-	        
+
 	        // Calcula el valor total multiplicando el número de noches por el costo por noche
-	        int valor = dias * noche;
-	        // Actualiza el campo de texto 'txtValor' con el valor calculado, precedido por "S/." para indicar la moneda
-	        txtValor.setText("S/." + valor);
+	        valor = dias * noche;
+
+	        // Establece el valor calculado en el campo de texto con el formato adecuado
+	        txtValor.setText("$ " + valor + " MXN");
 	    }
 	}
-
 	
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
