@@ -21,6 +21,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.text.Format;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -352,7 +353,31 @@ public class ReservasView extends JFrame {
 		}
 	}
 	
-	
+	public void calcularValor(JDateChooser fechaE, JDateChooser fechaS) {
+	    // Verifica si las fechas de entrada y salida no son nulas
+	    if (fechaE.getDate()!= null && fechaS.getDate()!= null) {
+	        // Crea objetos Calendar a partir de las fechas de entrada y salida
+	        Calendar inicio = fechaE.getCalendar();
+	        Calendar fin = fechaE.getCalendar();
+	        
+	        // Inicializa 'dias' en -1, para contar desde el día siguiente
+	        int dias = -1; 
+	        // Establece el costo por noche
+	        int noche = 80; // Costo por noche
+	        
+	        // Bucle que cuenta el número de noches entre las fechas de entrada y salida
+	        while(inicio.before(fin) || inicio.equals(fin)) {
+	            dias++;
+	            inicio.add(Calendar.DATE, 1); // Avanza al siguiente día
+	        }
+	        
+	        // Calcula el valor total multiplicando el número de noches por el costo por noche
+	        int valor = dias * noche;
+	        // Actualiza el campo de texto 'txtValor' con el valor calculado, precedido por "S/." para indicar la moneda
+	        txtValor.setText("S/." + valor);
+	    }
+	}
+
 	
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {

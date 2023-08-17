@@ -16,6 +16,7 @@ public class ReservacionesDao {
 		this.con = con;
 	}
 	
+	// Método para guardar una reserva en la base de datos	
 	public void guardar(Reservaciones reservaciones) {
 		try {
 			String sql = "INSERT INTO reservas (FechaEntrada, FechaSalida, Valor, FormaPago)"
@@ -27,6 +28,7 @@ public class ReservacionesDao {
 				pstm.setString(4, reservaciones.getFormaPago());
 				pstm.executeUpdate();
 				
+				// Obtener el ID generado y asignarlo a la reserva				
 				try (ResultSet rst = pstm.getGeneratedKeys()) {
 					while (rst.next()) {
 						reservaciones.setId(rst.getInt(1));
