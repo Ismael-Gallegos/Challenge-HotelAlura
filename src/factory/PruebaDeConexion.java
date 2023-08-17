@@ -6,13 +6,12 @@ import java.sql.SQLException;
 public class PruebaDeConexion {
 	
 	public static void main(String[] args) throws SQLException {
-		ConnectionFactory confa = new ConnectionFactory();
-		Connection cone = confa.conectaFactory();
-		
-		System.out.println("Conexión abierta");
-		
+		// Se intenta abrir una conexión a la base de datos
+        try (Connection cone = new ConnectionFactory().conectaFactory()) {
+            System.out.println("Conexión abierta");
 		cone.close();
-		
-		System.out.println("Conexión cerrada");
-	}
+        } catch (SQLException e) {
+            System.out.println("Error en la conexión: " + e.getMessage());
+        }
+    }
 }
