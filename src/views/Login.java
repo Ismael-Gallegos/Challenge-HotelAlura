@@ -4,10 +4,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import controller.UserController;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
@@ -179,21 +181,22 @@ public class Login extends JFrame {
 		lblContrasea.setBounds(65, 316, 140, 26);
 		panel.add(lblContrasea);
 		
-		JPanel btnLogin = new JPanel();
+		//JPanel btnLogin = new JPanel();
+		
+		JButton btnLogin = new JButton("Iniciar sesión"); // Crear un botón de inicio de sesión
+		btnLogin.addActionListener(new UserController(this)); // Agregar un ActionListener gestionado por UserController
+
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnLogin.setBackground(new Color(0, 156, 223));
+				btnLogin.setBackground(new Color(0, 156, 223)); // Cambiar el color de fondo cuando el mouse entra en el botón
 			}
 		
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnLogin.setBackground(SystemColor.textHighlight);
 			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Login();
-			}
+			
 		});
 		btnLogin.setBackground(SystemColor.textHighlight);
 		btnLogin.setBounds(65, 431, 122, 44);
@@ -234,20 +237,25 @@ public class Login extends JFrame {
 		header.setLayout(null);
 	}
 	
-	private void Login() {
-		 String Usuario= "admin";
-	     String Contraseña="admin";
+	/**
+	 * Obtiene el nombre de usuario ingresado en el campo de texto.
+	 *
+	 * @return El nombre de usuario ingresado.
+	 */
+	public String getNombre() {
+	    return txtUsuario.getText();
+	}
 
-	        String contrase=new String (txtContrasena.getPassword());
+	/**
+	 * Obtiene la contraseña ingresada en el campo de contraseña.
+	 *
+	 * @return La contraseña ingresada como una cadena de caracteres.
+	 */
+	public String getContrasena() {
+	    return new String(txtContrasena.getPassword());
+	}
 
-	        if(txtUsuario.getText().equals(Usuario) && contrase.equals(Contraseña)){
-	            MenuUsuario menu = new MenuUsuario();
-	            menu.setVisible(true);
-	            dispose();	 
-	        }else {
-	            JOptionPane.showMessageDialog(this, "Usuario o Contraseña no válidos");
-	        }
-	} 
+	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
 	        xMouse = evt.getX();
 	        yMouse = evt.getY();

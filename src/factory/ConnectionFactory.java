@@ -14,7 +14,7 @@ public class ConnectionFactory {
     public ConnectionFactory() {
         ComboPooledDataSource cpds = new ComboPooledDataSource();
         
-        cpds.setJdbcUrl("jdbc:mysql://localhost/control_de_stock?useTimeZone=true&serverTimeZone=UTC");
+        cpds.setJdbcUrl("jdbc:mysql://localhost/hotel_alura?useTimeZone=true&serverTimeZone=UTC");
         cpds.setUser("root");
         cpds.setPassword("2410.");
         cpds.setMaxPoolSize(15);
