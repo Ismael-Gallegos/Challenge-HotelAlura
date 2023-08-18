@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -19,9 +20,11 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.text.Format;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Locale;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -345,7 +348,7 @@ public class ReservasView extends JFrame {
 		    reservacionesController.guardar(reservaciones);
 		    
 		    // Abrir la siguiente ventana
-		    RegistroHuesped registro = new RegistroHuesped();
+		    RegistroHuesped registro = new RegistroHuesped(reservaciones.getId()); 
 		    registro.setVisible(true);
 		    dispose();
 		}else {
@@ -355,36 +358,30 @@ public class ReservasView extends JFrame {
 	
 	public void calcularValor(JDateChooser fechaE, JDateChooser fechaS) {
 	    // Verifica si las fechas de entrada y salida no son nulas
-	    if (fechaE.getDate()!= null && fechaS.getDate()!= null) {
-	        if (fechaE.getDate().after(fechaS.getDate())) {
-	            JOptionPane.showMessageDialog(null, "La fecha de entrada no puede ser posterior a la fecha de salida",
-	                    "Error en las fechas", JOptionPane.ERROR_MESSAGE);
-	            return;
-	        }
-
-	        // Crea objetos Calendar a partir de las fechas de entrada y salida
+	    if (fechaE.getDate() != null && fechaS.getDate() != null) {
 	        Calendar inicio = fechaE.getCalendar();
 	        Calendar fin = fechaS.getCalendar();
-
-	        // Inicializa 'dias' en -1, para contar desde el día siguiente
-	        int dias = -1; 
-	        // Establece el costo por noche
-	        int noche = 250; // Costo por noche
+	        int dias = -1;
+	        int noche = 250;
 	        int valor;
-
-	        // Bucle que cuenta el número de noches entre las fechas de entrada y salida
-	        while(inicio.before(fin) || inicio.equals(fin)) {
+	        
+	        while (inicio.before(fin) || inicio.equals(fin)) {
 	            dias++;
-	            inicio.add(Calendar.DATE, 1); // Avanza al siguiente día
+	            inicio.add(Calendar.DATE, 1);
 	        }
-
-	        // Calcula el valor total multiplicando el número de noches por el costo por noche
 	        valor = dias * noche;
-
-	        // Establece el valor calculado en el campo de texto con el formato adecuado
-	        txtValor.setText("$ " + valor + " MXN");
+	        
+	     // Formatear el valor como un número decimal antes de asignarlo al campo de texto
+	        String valorFormateado = String.format("%.2f", (double) valor);
+	        txtValor.setText(valorFormateado); // Formatea el valor como decimal
+	        
+	        // Almacenar el valor sin formato de moneda en una variable numérica
+	        double valorNumerico = (double) valor;
 	    }
 	}
+
+
+
 	
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {
