@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.Connection;
+import java.util.List;
 
 import DAO.ReservacionesDao;
 import Modelo.Reservaciones;
@@ -25,4 +26,9 @@ public class ReservacionesController {
 	public void guardar(Reservaciones reservaciones) {
 		this.reservacionDao.guardar(reservaciones);
 	}
+	// Método para obtener una lista de reservaciones desde la base de datos.
+	public List<Reservaciones> mostrar (){
+		return this.reservacionDao.mostrar();
+	}
+	
 }

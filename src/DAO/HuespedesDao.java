@@ -46,8 +46,7 @@ public class HuespedesDao {
 				}				
 			}	
 		} catch (SQLException e) {
-			// Manejar una excepción SQL lanzando una RuntimeException con el mensaje de error
-			throw new RuntimeException("Error aquí" + e.getMessage(),e);
+			throw new RuntimeException(e);
 		}
 	}
 }

@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import Modelo.Reservaciones;
+import controller.HuespedesController;
+import controller.ReservacionesController;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -25,6 +30,7 @@ import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.SQLException;
 
 @SuppressWarnings("serial")
 public class Busqueda extends JFrame {
@@ -39,6 +45,12 @@ public class Busqueda extends JFrame {
 	private JLabel labelExit;
 	int xMouse, yMouse;
 
+	private ReservacionesController reservacionesControl;
+	private HuespedesController huespedControl;
+	private ReservasView reservasVista;
+	String reservacion;
+	String huespedes;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,6 +71,11 @@ public class Busqueda extends JFrame {
 	 * Create the frame.
 	 */
 	public Busqueda() {
+		//ESTO AGREGUE
+		this.reservasVista = new ReservasView();
+		this.reservacionesControl = new ReservacionesController();
+		this.huespedControl = new HuespedesController();
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/imagenes/lupa2.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 571);
@@ -104,6 +121,7 @@ public class Busqueda extends JFrame {
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
+		mostrarTablaReservaciones();
 		
 		
 		tbHuespedes = new JTable();
@@ -260,6 +278,29 @@ public class Busqueda extends JFrame {
 		lblEliminar.setBounds(0, 0, 122, 35);
 		btnEliminar.add(lblEliminar);
 		setResizable(false);
+	}
+	
+	private List<Reservaciones> mostrarReservaciones() {
+		return this.reservacionesControl.mostrar();
+	}
+	// Método para mostrar las reservaciones en la tabla
+	private void mostrarTablaReservaciones() {
+	    List<Reservaciones> reservaciones = mostrarReservaciones();
+	    modelo.setRowCount(0); // Limpia las filas existentes en el modelo de la tabla
+	    try {
+	        for (Reservaciones reserv : reservaciones) {
+	        	 // Agregar una nueva fila con los valores de cada atributo de la reservación
+	            modelo.addRow(new Object[]{
+	            		reserv.getId(),         // Agregar el ID de la reservación a la columna
+	                    reserv.getFechaE(),     // Agregar la fecha de entrada a la columna
+	                    reserv.getFechaS(),     // Agregar la fecha de salida a la columna
+	                    reserv.getValor(),      // Agregar el valor a la columna
+	                    reserv.getFormaPago()   // Agregar la forma de pago a la columna
+	                });
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace(); // Manejo de excepciones: imprime la traza de la excepción para depuración
+	    }
 	}
 	
 //Código que permite mover la ventana por la pantalla según la posición de "x" y "y"

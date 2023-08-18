@@ -18,19 +18,22 @@ public class Reservaciones {
 		this.formaPago = formaPago;
 	}
 	
-	
-	
+	public Reservaciones(Integer id, LocalDate fechaE, LocalDate fechaS, String valor, String formaPago) {
+		super();
+		this.id = id;
+		this.fechaE = fechaE;
+		this.fechaS = fechaS;
+		this.valor = valor;
+		this.formaPago = formaPago;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
-
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-
 
 	public void setId(int id) {
 	    this.id = id;
