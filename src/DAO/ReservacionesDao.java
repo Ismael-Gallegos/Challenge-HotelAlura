@@ -66,9 +66,30 @@ public class ReservacionesDao {
 			}
 			return reservaciones;
 		} catch (SQLException e) {
-			throw new RuntimeException("Verifica ReservDAO" + e.getMessage(),e);
+			throw new RuntimeException("Verifica Metodo MostrarReserv. ReservDAO" + e.getMessage(),e);
 		}
 	}
+	
+	// Método para buscar las reservaciones
+		public List<Reservaciones> buscar(String id) {
+	    List<Reservaciones> reservaciones = new ArrayList<>();
+	    try {
+	        // Consulta SQL para buscar reservas por ID
+	        String sql = "SELECT id, fechaEntrada, fechaSalida, valor, formaPago FROM reservas WHERE id = ?";
+	        try (PreparedStatement pstm = con.prepareStatement(sql)) {
+	            pstm.setString(1, id);
+	            pstm.execute();
+	            
+	            // Llena la lista de reservaciones con los resultados de la consulta
+	            transformarResultado(reservaciones, pstm);
+	        }
+	        return reservaciones;
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Verifica metodo Buscar ReservDAO" + e.getMessage(), e);
+	    }
+	}
+	
+	
 	// Método para transformar el resultado de la consulta en objetos Reservaciones
 	private void transformarResultado(List<Reservaciones> reservaciones, PreparedStatement pstm) throws SQLException {
 		try(ResultSet rst = pstm.getResultSet()) {

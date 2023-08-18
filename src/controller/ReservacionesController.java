@@ -30,5 +30,9 @@ public class ReservacionesController {
 	public List<Reservaciones> mostrar (){
 		return this.reservacionDao.mostrar();
 	}
+	// Métod de búsqueda de las Reservaciones.
+	public List<Reservaciones> buscar (String id){
+		return this.reservacionDao.buscar(id);
+	}
 	
 }

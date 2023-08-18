@@ -234,7 +234,13 @@ public class Busqueda extends JFrame {
 		btnbuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+				//AGREGADO
+				limpiarTabla();
+				if (txtBuscar.getText().equals("")) {
+					mostrarTablaReservaciones();
+				} else {
+					mostrarTablaReservaciones();
+				}
 			}
 		});
 		btnbuscar.setLayout(null);
@@ -283,9 +289,14 @@ public class Busqueda extends JFrame {
 	private List<Reservaciones> mostrarReservaciones() {
 		return this.reservacionesControl.mostrar();
 	}
+	
+	private List<Reservaciones> buscarIdReservaciones() {
+		return this.reservacionesControl.buscar(txtBuscar.getText()); // Llama al método de búsqueda en reservacionesControl
+	}
+	
 	// Método para mostrar las reservaciones en la tabla
 	private void mostrarTablaReservaciones() {
-	    List<Reservaciones> reservaciones = mostrarReservaciones();
+	    List<Reservaciones> reservaciones = buscarIdReservaciones();
 	    modelo.setRowCount(0); // Limpia las filas existentes en el modelo de la tabla
 	    try {
 	        for (Reservaciones reserv : reservaciones) {
@@ -301,6 +312,29 @@ public class Busqueda extends JFrame {
 	    } catch (Exception e) {
 	        e.printStackTrace(); // Manejo de excepciones: imprime la traza de la excepción para depuración
 	    }
+	}
+	
+	// Método NUEVO
+		private void mostrarTablaReservacionesId() {
+	    List<Reservaciones> reservaciones = mostrarReservaciones();
+	    try {
+	        for (Reservaciones reserv : reservaciones) {
+	            modelo.addRow(new Object[]{
+	                reserv.getId(),         // Agregar el ID de la reservación a la columna
+	                reserv.getFechaE(),     // Agregar la fecha de entrada a la columna
+	                reserv.getFechaS(),     // Agregar la fecha de salida a la columna
+	                reserv.getValor(),      // Agregar el valor a la columna
+	                reserv.getFormaPago()   // Agregar la forma de pago a la columna
+	            });
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace(); // Manejo de excepciones: imprime la traza de la excepción para depuración
+	    }
+	}
+
+	private void limpiarTabla() {
+	    ((DefaultTableModel) tbHuespedes.getModel()).setRowCount(0);
+	    ((DefaultTableModel) tbReservas.getModel()).setRowCount(0);
 	}
 	
 //Código que permite mover la ventana por la pantalla según la posición de "x" y "y"
