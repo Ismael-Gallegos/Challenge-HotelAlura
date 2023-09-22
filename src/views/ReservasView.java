@@ -379,9 +379,12 @@ public class ReservasView extends JFrame {
 	        double valorNumerico = (double) valor;
 	    }
 	}
-
-
-
+	
+	// Metodo para actualizar las fechas de la tabla y se limite el valor.
+	public void limpiarValor() {
+		txtValor.setText("");
+	}
+	
 	
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
 	 private void headerMousePressed(java.awt.event.MouseEvent evt) {

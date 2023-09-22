@@ -1,5 +1,7 @@
 package DAO;
 
+import java.beans.JavaBean;
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +17,6 @@ public class ReservacionesDao {
 	private Connection con;
 
 	public ReservacionesDao(Connection con) {
-		super();
 		this.con = con;
 	}
 	
@@ -53,9 +54,9 @@ public class ReservacionesDao {
 	    }
 	}
 	// Método para obtener y mostrar las reservaciones
-	public List<Reservaciones> mostrar() {
-		List<Reservaciones> reservaciones = new ArrayList<>();
-		try {
+	public List<Reservaciones> buscar() {
+		List<Reservaciones> reservaciones = new ArrayList<Reservaciones>();
+		try { 
 			// Consulta SQL para seleccionar campos de la tabla reservas
 			String sql = "SELECT id, fechaEntrada, fechaSalida, valor, formaPago FROM reservas";
 			try(PreparedStatement pstm = con.prepareStatement(sql)) {
@@ -71,7 +72,7 @@ public class ReservacionesDao {
 	}
 	
 	// Método para buscar las reservaciones
-		public List<Reservaciones> buscar(String id) {
+		public List<Reservaciones> buscariD(String id) {
 	    List<Reservaciones> reservaciones = new ArrayList<>();
 	    try {
 	        // Consulta SQL para buscar reservas por ID
@@ -88,7 +89,39 @@ public class ReservacionesDao {
 	        throw new RuntimeException("Verifica metodo Buscar ReservDAO" + e.getMessage(), e);
 	    }
 	}
-	
+		
+		//METODO NUEVO
+		public void Actualizar(LocalDate fechaE, LocalDate fechaS, String valor, String formaPago, Integer id) {
+		    try (PreparedStatement stm = con.prepareStatement("UPDATE reservas SET "
+		            + "FechaEntrada=?, fechaSalida=?, valor=?, formaPago=? WHERE id=?")) {
+		        stm.setObject(1, java.sql.Date.valueOf(fechaE));
+		        stm.setObject(2, java.sql.Date.valueOf(fechaS));
+		        stm.setString(3, valor);
+		        stm.setString(4, formaPago);
+		        stm.setInt(5, id);
+		        stm.execute();
+		    } catch (SQLException e) {
+		        throw new RuntimeException("Verifica metodo ACTUALIZAR ReservDAO" + e.getMessage(), e);
+		    }
+		}
+		//METODO NUEVO
+		public void Eliminar(Integer id) {
+		    try {
+		        try (java.sql.Statement state = con.createStatement()) { // Utiliza java.sql.Statement
+		            state.execute("SET FOREIGN_KEY_CHECKS=0");
+		        }
+		        try (PreparedStatement stm = con.prepareStatement("DELETE FROM reservas WHERE id = ?")) {
+		            stm.setInt(1, id);
+		            stm.execute();
+		        }
+
+		        try (java.sql.Statement state = con.createStatement()) { // Utiliza java.sql.Statement
+		            state.execute("SET FOREIGN_KEY_CHECKS=1");
+		        }
+		    } catch (SQLException e) {
+		        throw new RuntimeException("Verifica metodo ELIMINAR ReservDAO: " + e.getMessage(), e);
+		    }
+		}
 	
 	// Método para transformar el resultado de la consulta en objetos Reservaciones
 	private void transformarResultado(List<Reservaciones> reservaciones, PreparedStatement pstm) throws SQLException {

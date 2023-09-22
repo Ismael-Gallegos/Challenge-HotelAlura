@@ -1,6 +1,7 @@
 package controller;
 
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.List;
 
 import DAO.ReservacionesDao;
@@ -12,8 +13,8 @@ public class ReservacionesController {
 	private ReservacionesDao reservacionDao;
 
 	public ReservacionesController(ReservacionesDao reservacionDao) {
-		super();
-		this.reservacionDao = reservacionDao;
+		Connection con = new ConnectionFactory().conectaFactory();
+		this.reservacionDao = new ReservacionesDao(con);
 	}
 	
 	// Constructor adicional sin parámetros
@@ -27,12 +28,20 @@ public class ReservacionesController {
 		this.reservacionDao.guardar(reservaciones);
 	}
 	// Método para obtener una lista de reservaciones desde la base de datos.
-	public List<Reservaciones> mostrar (){
-		return this.reservacionDao.mostrar();
+	public List<Reservaciones> buscar (){
+		return this.reservacionDao.buscar();
 	}
 	// Métod de búsqueda de las Reservaciones.
-	public List<Reservaciones> buscar (String id){
-		return this.reservacionDao.buscar(id);
+	public List<Reservaciones> buscarId (String id){
+		return this.reservacionDao.buscariD(id);
 	}
-	
+	// Métod para Actualizar las Reservaciones.
+	public void actualizarReservaciones(LocalDate fechaE, LocalDate fechaS, String valor, String formaPago, Integer id) {
+		this.reservacionDao.Actualizar(fechaE, fechaS, valor, formaPago, id);
+	}
+	// Métod para Elinimar las Reservaciones.
+	public void Eliminar(Integer id) {
+		this.reservacionDao.Eliminar(id);
+	}
+
 }

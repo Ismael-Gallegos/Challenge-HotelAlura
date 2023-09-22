@@ -27,6 +27,21 @@ public class RegHuespedes {
 		this.idReserva = idReserva;
 	}
 
+	public RegHuespedes(Integer id, String nombre, String apellido, LocalDate fechaNacimiento, String nacionalidad,
+			String telefono, Integer idReserva) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fechaNacimiento = fechaNacimiento;
+		this.nacionalidad = nacionalidad;
+		this.telefono = telefono;
+		this.idReserva = idReserva;
+	}
+
+
+
+
 
 	public Integer getId() {
 		return id;
